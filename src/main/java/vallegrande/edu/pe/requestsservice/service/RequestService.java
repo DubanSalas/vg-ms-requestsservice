@@ -1,0 +1,15 @@
+package vallegrande.edu.pe.requestsservice.service;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import vallegrande.edu.pe.requestsservice.model.Request;
+
+public interface RequestService {
+    Flux<Request> findAll();
+    Flux<Request> findByStatus(String status);
+    Mono<Request> findById(Long id);
+    Mono<Request> save(Request request);
+    Mono<Request> update(Long id, Request request);
+    Mono<Request> changeStatus(Long id, String status);
+    Mono<Void> delete(Long id);
+}
