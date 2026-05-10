@@ -36,6 +36,16 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    public Flux<Request> findByTenantId(Long tenantId) {
+        return repository.findByTenantId(tenantId).flatMap(this::enrichWithType);
+    }
+
+    @Override
+    public Flux<Request> findByTenantIdAndStatus(Long tenantId, String status) {
+        return repository.findByTenantIdAndStatus(tenantId, status).flatMap(this::enrichWithType);
+    }
+
+    @Override
     public Mono<Request> findById(Long id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("Request not found: " + id)))

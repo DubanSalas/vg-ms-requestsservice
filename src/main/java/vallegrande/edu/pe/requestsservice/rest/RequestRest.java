@@ -19,7 +19,10 @@ public class RequestRest {
     private final RequestService service;
 
     @GetMapping
-    public Flux<Request> findAll(@RequestParam(required = false) String status) {
+    public Flux<Request> findAll(@RequestParam(required = false) String status,
+                                  @RequestParam(required = false) Long tenantId) {
+        if (tenantId != null && status != null) return service.findByTenantIdAndStatus(tenantId, status);
+        if (tenantId != null) return service.findByTenantId(tenantId);
         if (status != null) return service.findByStatus(status);
         return service.findAll();
     }

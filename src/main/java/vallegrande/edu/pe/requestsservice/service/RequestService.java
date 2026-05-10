@@ -7,6 +7,8 @@ import vallegrande.edu.pe.requestsservice.model.Request;
 public interface RequestService {
     Flux<Request> findAll();
     Flux<Request> findByStatus(String status);
+    Flux<Request> findByTenantId(Long tenantId);
+    Flux<Request> findByTenantIdAndStatus(Long tenantId, String status);
     Mono<Request> findById(Long id);
     Mono<Request> save(Request request);
     Mono<Request> update(Long id, Request request);
