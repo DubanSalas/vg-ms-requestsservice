@@ -12,4 +12,5 @@ public class RequestType {
     private Long id;
     private String name;
     private String description;
+    private Boolean active;
 }

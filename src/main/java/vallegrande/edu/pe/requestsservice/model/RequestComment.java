@@ -16,6 +16,9 @@ public class RequestComment {
     @Column("request_id")
     private Long requestId;
 
+    @Column("author_name")
+    private String authorName;
+
     private String comment;
 
     @Column("created_at")

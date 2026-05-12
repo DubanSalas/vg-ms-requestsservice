@@ -28,6 +28,11 @@ public class Request {
 
     private String description;
 
+    @Column("document_url")
+    private String documentUrl;
+
+    private String priority;
+
     @Column("request_date")
     private LocalDateTime requestDate;
 

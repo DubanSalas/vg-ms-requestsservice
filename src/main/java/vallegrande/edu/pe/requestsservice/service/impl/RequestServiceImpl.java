@@ -57,6 +57,7 @@ public class RequestServiceImpl implements RequestService {
         request.setCreatedAt(LocalDateTime.now());
         request.setUpdatedAt(LocalDateTime.now());
         if (request.getStatus() == null) request.setStatus("PENDIENTE");
+        if (request.getPriority() == null) request.setPriority("MEDIA");
         if (request.getRequestDate() == null) request.setRequestDate(LocalDateTime.now());
         // Si viene requestType con id, extraer el requestTypeId
         if (request.getRequestTypeId() == null && request.getRequestType() != null && request.getRequestType().getId() != null) {
@@ -77,6 +78,8 @@ public class RequestServiceImpl implements RequestService {
                 existing.setRequestTypeId(request.getRequestType().getId());
             }
             existing.setDescription(request.getDescription());
+            existing.setDocumentUrl(request.getDocumentUrl());
+            existing.setPriority(request.getPriority());
             if (request.getRequestDate() != null) existing.setRequestDate(request.getRequestDate());
             existing.setStatus(request.getStatus());
             existing.setUpdatedAt(LocalDateTime.now());
