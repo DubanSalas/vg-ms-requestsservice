@@ -35,6 +35,7 @@ public class RequestTypeServiceImpl implements RequestTypeService {
         return findById(id).flatMap(existing -> {
             existing.setName(requestType.getName());
             existing.setDescription(requestType.getDescription());
+            if (requestType.getActive() != null) existing.setActive(requestType.getActive());
             return repository.save(existing);
         });
     }
