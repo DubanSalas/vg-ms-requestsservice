@@ -17,7 +17,8 @@ public class RequestTypeRest {
     private final RequestTypeService service;
 
     @GetMapping
-    public Flux<RequestType> findAll() {
+    public Flux<RequestType> findAll(@RequestParam(required = false) Long tenantId) {
+        if (tenantId != null) return service.findByTenantId(tenantId);
         return service.findAll();
     }
 

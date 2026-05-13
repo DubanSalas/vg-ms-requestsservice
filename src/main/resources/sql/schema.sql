@@ -5,6 +5,7 @@
 -- Tipos de solicitud disponibles en la parroquia
 CREATE TABLE IF NOT EXISTS request_types (
     id          BIGSERIAL PRIMARY KEY,
+    tenant_id   BIGINT,
     name        VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     active      BOOLEAN DEFAULT TRUE

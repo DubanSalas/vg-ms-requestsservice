@@ -20,6 +20,11 @@ public class RequestTypeServiceImpl implements RequestTypeService {
     }
 
     @Override
+    public Flux<RequestType> findByTenantId(Long tenantId) {
+        return repository.findByTenantId(tenantId);
+    }
+
+    @Override
     public Mono<RequestType> findById(Long id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("RequestType not found: " + id)));
