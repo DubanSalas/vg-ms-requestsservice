@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS requests (
     people_id       BIGINT,
     request_type_id BIGINT,
     description     TEXT,
-    document_url    VARCHAR(500),
+    document_url    TEXT,
     priority        VARCHAR(20)  DEFAULT 'MEDIA',
     request_date    TIMESTAMP,
     resolved_date   TIMESTAMP,

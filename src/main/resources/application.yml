@@ -7,7 +7,11 @@ spring:
     username: ${DATABASE_USERNAME:neondb_owner}
     password: ${DATABASE_PASSWORD:npg_JPQSp1e0TCj0}
   codec:
-    max-in-memory-size: 10MB
+    max-in-memory-size: 20MB
+  webflux:
+    multipart:
+      max-request-size: 20MB
+      max-in-memory-size: 20MB
 
 logging:
   level:
