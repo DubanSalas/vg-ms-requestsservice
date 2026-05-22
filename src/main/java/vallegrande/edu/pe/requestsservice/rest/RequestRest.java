@@ -9,6 +9,7 @@ import vallegrande.edu.pe.requestsservice.model.Request;
 import vallegrande.edu.pe.requestsservice.service.RequestService;
 
 import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -18,12 +19,30 @@ public class RequestRest {
 
     private final RequestService service;
 
+    /**
+     * GET /v1/api/requests
+     * Parámetros opcionales:
+     *   tenantId, status, category (MISA|ACTA_SACRAMENTAL|SACRAMENTO), sacramentId (UUID)
+     */
     @GetMapping
-    public Flux<Request> findAll(@RequestParam(required = false) String status,
-                                  @RequestParam(required = false) Long tenantId) {
-        if (tenantId != null && status != null) return service.findByTenantIdAndStatus(tenantId, status);
-        if (tenantId != null) return service.findByTenantId(tenantId);
-        if (status != null) return service.findByStatus(status);
+    public Flux<Request> findAll(
+            @RequestParam(required = false) Long tenantId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) UUID sacramentId) {
+
+        if (tenantId != null && category != null && status != null)
+            return service.findByTenantIdAndCategoryAndStatus(tenantId, category, status);
+        if (tenantId != null && category != null)
+            return service.findByTenantIdAndCategory(tenantId, category);
+        if (tenantId != null && sacramentId != null)
+            return service.findByTenantIdAndSacramentId(tenantId, sacramentId);
+        if (tenantId != null && status != null)
+            return service.findByTenantIdAndStatus(tenantId, status);
+        if (tenantId != null)
+            return service.findByTenantId(tenantId);
+        if (status != null)
+            return service.findByStatus(status);
         return service.findAll();
     }
 

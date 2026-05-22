@@ -13,6 +13,10 @@ logging:
   level:
     org.springframework.r2dbc: DEBUG
 
+services:
+  sacrament:
+    url: ${SACRAMENT_SERVICE_URL:http://localhost:8086}
+
 springdoc:
   api-docs:
     enabled: true

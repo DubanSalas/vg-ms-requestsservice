@@ -1,5 +1,10 @@
 -- =============================================
 -- REQUESTS SERVICE - DATA
--- Los tipos de solicitud son creados por cada
--- tenant (parroquia) desde la interfaz.
+-- Categorías de solicitud fijas (no configurables por tenant):
+--   MISA            → Reserva de misa
+--   ACTA_SACRAMENTAL → Acta de sacramento (Bautismo, Eucaristía, Confirmación, Matrimonio)
+--   SACRAMENTO      → Inscripción/registro para recibir un sacramento
+--
+-- Tipos de sacramento (sacrament_type):
+--   BAUTISMO | EUCARISTIA | CONFIRMACION | MATRIMONIO
 -- =============================================
