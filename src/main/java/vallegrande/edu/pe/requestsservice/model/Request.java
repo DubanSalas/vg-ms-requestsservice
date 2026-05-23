@@ -21,24 +21,19 @@ public class Request {
     @Column("people_id")
     private Long peopleId;
 
-    /**
-     * Categoría de la solicitud:
-     * MISA | ACTA_SACRAMENTAL | SACRAMENTO
-     */
-    @Column("request_category")
-    private String requestCategory;
+    /** UUID de la misa (vg-ms-communityService) */
+    @Column("mass_id")
+    private UUID massId;
 
-    /**
-     * ID del sacramento del microservicio vg-ms-sacramentservice
-     * Aplica cuando requestCategory = ACTA_SACRAMENTAL o SACRAMENTO
-     * Ejemplo: UUID del Bautismo, Matrimonio, etc.
-     */
+    /** UUID del sacramento (vg-ms-sacramentservice) */
     @Column("sacrament_id")
     private UUID sacramentId;
 
-    /**
-     * Datos del sacramento enriquecidos desde vg-ms-sacramentservice (no se persiste)
-     */
+    /** Datos de la misa enriquecidos (no se persiste) */
+    @Transient
+    private MassInfo mass;
+
+    /** Datos del sacramento enriquecidos (no se persiste) */
     @Transient
     private SacramentInfo sacrament;
 
@@ -63,12 +58,19 @@ public class Request {
     @Column("updated_at")
     private LocalDateTime updatedAt;
 
-    /**
-     * DTO interno para los datos del sacramento traídos del microservicio externo
-     */
+    @Data
+    public static class MassInfo {
+        private UUID   id;
+        private String nombre;
+        private String intencion;
+        private String fecha;
+        private String hora;
+        private String estado;
+    }
+
     @Data
     public static class SacramentInfo {
-        private UUID id;
+        private UUID   id;
         private String name;
         private String description;
     }

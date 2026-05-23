@@ -11,9 +11,8 @@ public interface RequestService {
     Flux<Request> findByStatus(String status);
     Flux<Request> findByTenantId(Long tenantId);
     Flux<Request> findByTenantIdAndStatus(Long tenantId, String status);
-    Flux<Request> findByTenantIdAndCategory(Long tenantId, String category);
-    Flux<Request> findByTenantIdAndCategoryAndStatus(Long tenantId, String category, String status);
     Flux<Request> findByTenantIdAndSacramentId(Long tenantId, UUID sacramentId);
+    Flux<Request> findByTenantIdAndMassId(Long tenantId, UUID massId);
     Mono<Request> findById(Long id);
     Mono<Request> save(Request request);
     Mono<Request> update(Long id, Request request);

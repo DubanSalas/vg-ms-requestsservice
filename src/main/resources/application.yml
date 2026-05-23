@@ -1,11 +1,11 @@
 server:
-  port: ${PORT:8085}
+  port: 8085
 
 spring:
   r2dbc:
-    url: ${DATABASE_URL:r2dbc:postgresql://ep-sweet-cherry-ac1jujjy-pooler.sa-east-1.aws.neon.tech/requestsservice?sslmode=require&channel_binding=require}
-    username: ${DATABASE_USERNAME:neondb_owner}
-    password: ${DATABASE_PASSWORD:npg_JPQSp1e0TCj0}
+    url: r2dbc:postgresql://ep-sweet-cherry-ac1jujjy-pooler.sa-east-1.aws.neon.tech/requestsservice?sslmode=require&channel_binding=require
+    username: neondb_owner
+    password: npg_JPQSp1e0TCj0
   codec:
     max-in-memory-size: 20MB
 
@@ -15,7 +15,9 @@ logging:
 
 services:
   sacrament:
-    url: ${SACRAMENT_SERVICE_URL:http://localhost:8086}
+    url: http://localhost:8083
+  community:
+    url: http://localhost:8090
 
 springdoc:
   api-docs:

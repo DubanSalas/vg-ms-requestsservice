@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import vallegrande.edu.pe.requestsservice.client.MassClient;
+import vallegrande.edu.pe.requestsservice.client.SacramentClient;
 import vallegrande.edu.pe.requestsservice.model.Request;
 import vallegrande.edu.pe.requestsservice.service.RequestService;
 
@@ -17,26 +19,41 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RequestRest {
 
-    private final RequestService service;
+    private final RequestService  service;
+    private final SacramentClient sacramentClient;
+    private final MassClient      massClient;
 
-    /**
-     * GET /v1/api/requests
-     * Parámetros opcionales:
-     *   tenantId, status, category (MISA|ACTA_SACRAMENTAL|SACRAMENTO), sacramentId (UUID)
-     */
+    // ── Proxy a microservicios de compañeros ─────────────────────────────────
+
+    /** GET /v1/api/requests/types/sacraments?tenantId=1 */
+    @GetMapping("/types/sacraments")
+    public Flux<?> getSacraments(@RequestParam(required = false) Integer tenantId) {
+        return tenantId != null
+                ? sacramentClient.findByTenant(tenantId)
+                : sacramentClient.findAll();
+    }
+
+    /** GET /v1/api/requests/types/masses?tenantId=1 */
+    @GetMapping("/types/masses")
+    public Flux<?> getMasses(@RequestParam(required = false) Long tenantId) {
+        return tenantId != null
+                ? massClient.findByTenant(tenantId)
+                : massClient.findActive();
+    }
+
+    // ── Solicitudes ──────────────────────────────────────────────────────────
+
     @GetMapping
     public Flux<Request> findAll(
             @RequestParam(required = false) Long tenantId,
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) UUID sacramentId) {
+            @RequestParam(required = false) UUID sacramentId,
+            @RequestParam(required = false) UUID massId) {
 
-        if (tenantId != null && category != null && status != null)
-            return service.findByTenantIdAndCategoryAndStatus(tenantId, category, status);
-        if (tenantId != null && category != null)
-            return service.findByTenantIdAndCategory(tenantId, category);
         if (tenantId != null && sacramentId != null)
             return service.findByTenantIdAndSacramentId(tenantId, sacramentId);
+        if (tenantId != null && massId != null)
+            return service.findByTenantIdAndMassId(tenantId, massId);
         if (tenantId != null && status != null)
             return service.findByTenantIdAndStatus(tenantId, status);
         if (tenantId != null)

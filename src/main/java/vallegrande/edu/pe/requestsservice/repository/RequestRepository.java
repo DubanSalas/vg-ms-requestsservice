@@ -10,7 +10,6 @@ public interface RequestRepository extends ReactiveCrudRepository<Request, Long>
     Flux<Request> findByStatus(String status);
     Flux<Request> findByTenantId(Long tenantId);
     Flux<Request> findByTenantIdAndStatus(Long tenantId, String status);
-    Flux<Request> findByTenantIdAndRequestCategory(Long tenantId, String requestCategory);
-    Flux<Request> findByTenantIdAndRequestCategoryAndStatus(Long tenantId, String requestCategory, String status);
     Flux<Request> findByTenantIdAndSacramentId(Long tenantId, UUID sacramentId);
+    Flux<Request> findByTenantIdAndMassId(Long tenantId, UUID massId);
 }

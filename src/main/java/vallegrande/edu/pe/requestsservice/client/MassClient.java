@@ -5,42 +5,42 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import vallegrande.edu.pe.requestsservice.model.Request.SacramentInfo;
+import vallegrande.edu.pe.requestsservice.model.Request.MassInfo;
 
 import java.util.UUID;
 
 @Component
-public class SacramentClient {
+public class MassClient {
 
     private final WebClient webClient;
 
-    public SacramentClient(@Value("${services.sacrament.url:http://localhost:8086}") String baseUrl) {
+    public MassClient(@Value("${services.community.url:http://localhost:8090}") String baseUrl) {
         this.webClient = WebClient.builder()
                 .baseUrl(baseUrl)
                 .build();
     }
 
-    public Mono<SacramentInfo> findById(UUID id) {
+    public Mono<MassInfo> findById(UUID id) {
         return webClient.get()
-                .uri("/api/sacraments/{id}", id)
+                .uri("/api/v1/masses/{id}", id)
                 .retrieve()
-                .bodyToMono(SacramentInfo.class)
+                .bodyToMono(MassInfo.class)
                 .onErrorResume(e -> Mono.empty());
     }
 
-    public Flux<SacramentInfo> findAll() {
+    public Flux<MassInfo> findByTenant(Long tenantId) {
         return webClient.get()
-                .uri("/api/sacraments")
+                .uri("/api/v1/masses/tenant/{tenantId}", tenantId)
                 .retrieve()
-                .bodyToFlux(SacramentInfo.class)
+                .bodyToFlux(MassInfo.class)
                 .onErrorResume(e -> Flux.empty());
     }
 
-    public Flux<SacramentInfo> findByTenant(Integer tenantId) {
+    public Flux<MassInfo> findActive() {
         return webClient.get()
-                .uri("/api/sacraments/tenant/{tenantId}", tenantId)
+                .uri("/api/v1/masses/active")
                 .retrieve()
-                .bodyToFlux(SacramentInfo.class)
+                .bodyToFlux(MassInfo.class)
                 .onErrorResume(e -> Flux.empty());
     }
 }

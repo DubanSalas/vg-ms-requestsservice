@@ -1,10 +1,7 @@
 -- =============================================
 -- REQUESTS SERVICE - DATA
--- Categorías de solicitud fijas (no configurables por tenant):
---   MISA            → Reserva de misa
---   ACTA_SACRAMENTAL → Acta de sacramento (Bautismo, Eucaristía, Confirmación, Matrimonio)
---   SACRAMENTO      → Inscripción/registro para recibir un sacramento
---
--- Tipos de sacramento (sacrament_type):
---   BAUTISMO | EUCARISTIA | CONFIRMACION | MATRIMONIO
+-- No hay datos iniciales.
+-- Los tipos de solicitud (misas y sacramentos)
+-- se obtienen en tiempo real desde los microservicios
+-- de los compañeros via el backend proxy.
 -- =============================================
