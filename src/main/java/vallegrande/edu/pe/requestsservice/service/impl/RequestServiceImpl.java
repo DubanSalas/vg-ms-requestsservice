@@ -2,6 +2,7 @@ package vallegrande.edu.pe.requestsservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import vallegrande.edu.pe.requestsservice.client.MassClient;
@@ -35,37 +36,45 @@ public class RequestServiceImpl implements RequestService {
         return Mono.just(r);
     }
 
-    @Override public Flux<Request> findAll() {
+    @Override @Transactional(readOnly = true)
+    public Flux<Request> findAll() {
         return repository.findAll().flatMap(this::enrich);
     }
 
-    @Override public Flux<Request> findByStatus(String status) {
+    @Override @Transactional(readOnly = true)
+    public Flux<Request> findByStatus(String status) {
         return repository.findByStatus(status).flatMap(this::enrich);
     }
 
-    @Override public Flux<Request> findByTenantId(Long tenantId) {
+    @Override @Transactional(readOnly = true)
+    public Flux<Request> findByTenantId(Long tenantId) {
         return repository.findByTenantId(tenantId).flatMap(this::enrich);
     }
 
-    @Override public Flux<Request> findByTenantIdAndStatus(Long tenantId, String status) {
+    @Override @Transactional(readOnly = true)
+    public Flux<Request> findByTenantIdAndStatus(Long tenantId, String status) {
         return repository.findByTenantIdAndStatus(tenantId, status).flatMap(this::enrich);
     }
 
-    @Override public Flux<Request> findByTenantIdAndSacramentId(Long tenantId, UUID sacramentId) {
+    @Override @Transactional(readOnly = true)
+    public Flux<Request> findByTenantIdAndSacramentId(Long tenantId, UUID sacramentId) {
         return repository.findByTenantIdAndSacramentId(tenantId, sacramentId).flatMap(this::enrich);
     }
 
-    @Override public Flux<Request> findByTenantIdAndMassId(Long tenantId, UUID massId) {
+    @Override @Transactional(readOnly = true)
+    public Flux<Request> findByTenantIdAndMassId(Long tenantId, UUID massId) {
         return repository.findByTenantIdAndMassId(tenantId, massId).flatMap(this::enrich);
     }
 
-    @Override public Mono<Request> findById(Long id) {
+    @Override @Transactional(readOnly = true)
+    public Mono<Request> findById(Long id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("Request not found: " + id)))
                 .flatMap(this::enrich);
     }
 
-    @Override public Mono<Request> save(Request request) {
+    @Override @Transactional
+    public Mono<Request> save(Request request) {
         if (request.getMassId() == null && request.getSacramentId() == null)
             return Mono.error(new IllegalArgumentException("mass_id or sacrament_id is required"));
         request.setCreatedAt(LocalDateTime.now());
@@ -76,7 +85,8 @@ public class RequestServiceImpl implements RequestService {
         return repository.save(request).flatMap(this::enrich);
     }
 
-    @Override public Mono<Request> update(Long id, Request request) {
+    @Override @Transactional
+    public Mono<Request> update(Long id, Request request) {
         return findById(id).flatMap(existing -> {
             existing.setTenantId(request.getTenantId());
             existing.setPeopleId(request.getPeopleId());
@@ -92,7 +102,8 @@ public class RequestServiceImpl implements RequestService {
         });
     }
 
-    @Override public Mono<Request> changeStatus(Long id, String status) {
+    @Override @Transactional
+    public Mono<Request> changeStatus(Long id, String status) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("Request not found: " + id)))
                 .flatMap(existing -> {
@@ -104,7 +115,8 @@ public class RequestServiceImpl implements RequestService {
                 });
     }
 
-    @Override public Mono<Void> delete(Long id) {
+    @Override @Transactional
+    public Mono<Void> delete(Long id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("Request not found: " + id)))
                 .flatMap(existing -> {

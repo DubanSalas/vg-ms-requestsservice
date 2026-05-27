@@ -1,5 +1,5 @@
 server:
-  port: 8085
+  port: 8087
 
 spring:
   r2dbc:
@@ -15,9 +15,9 @@ logging:
 
 services:
   sacrament:
-    url: http://localhost:8083
+    url: http://lab.vallegrande.edu.pe:8083
   community:
-    url: http://localhost:8090
+    url: http://lab.vallegrande.edu.pe:8090
 
 springdoc:
   api-docs:
