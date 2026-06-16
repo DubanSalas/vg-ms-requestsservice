@@ -7,8 +7,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import vallegrande.edu.pe.requestsservice.model.Request.MassInfo;
 
-import java.util.UUID;
-
 @Component
 public class MassClient {
 
@@ -20,7 +18,7 @@ public class MassClient {
                 .build();
     }
 
-    public Mono<MassInfo> findById(UUID id) {
+    public Mono<MassInfo> findById(String id) {
         return webClient.get()
                 .uri("/api/v1/masses/{id}", id)
                 .retrieve()
