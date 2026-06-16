@@ -11,7 +11,6 @@ import vallegrande.edu.pe.requestsservice.model.Request;
 import vallegrande.edu.pe.requestsservice.service.RequestService;
 
 import java.util.Map;
-import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -47,8 +46,8 @@ public class RequestRest {
     public Flux<Request> findAll(
             @RequestParam(required = false) Long tenantId,
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) UUID sacramentId,
-            @RequestParam(required = false) UUID massId) {
+            @RequestParam(required = false) String sacramentId,
+            @RequestParam(required = false) String massId) {
 
         if (tenantId != null && sacramentId != null)
             return service.findByTenantIdAndSacramentId(tenantId, sacramentId);

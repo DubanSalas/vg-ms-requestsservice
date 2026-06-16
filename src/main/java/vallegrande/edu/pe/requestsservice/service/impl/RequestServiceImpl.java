@@ -12,7 +12,6 @@ import vallegrande.edu.pe.requestsservice.repository.RequestRepository;
 import vallegrande.edu.pe.requestsservice.service.RequestService;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -57,12 +56,12 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override @Transactional(readOnly = true)
-    public Flux<Request> findByTenantIdAndSacramentId(Long tenantId, UUID sacramentId) {
+    public Flux<Request> findByTenantIdAndSacramentId(Long tenantId, String sacramentId) {
         return repository.findByTenantIdAndSacramentId(tenantId, sacramentId).flatMap(this::enrich);
     }
 
     @Override @Transactional(readOnly = true)
-    public Flux<Request> findByTenantIdAndMassId(Long tenantId, UUID massId) {
+    public Flux<Request> findByTenantIdAndMassId(Long tenantId, String massId) {
         return repository.findByTenantIdAndMassId(tenantId, massId).flatMap(this::enrich);
     }
 

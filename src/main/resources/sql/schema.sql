@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS requests (
     tenant_id      BIGINT,
     people_id      BIGINT,
 
-    -- UUID de la misa (solo cuando es solicitud de misa)
-    mass_id        UUID,
+    -- ID de la misa (solo cuando es solicitud de misa)
+    mass_id        TEXT,
 
     -- UUID del sacramento (cuando es sacramento o acta sacramental)
     sacrament_id   UUID,

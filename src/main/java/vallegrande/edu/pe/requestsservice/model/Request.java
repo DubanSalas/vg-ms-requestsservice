@@ -21,9 +21,9 @@ public class Request {
     @Column("people_id")
     private Long peopleId;
 
-    /** UUID de la misa (vg-ms-communityService) */
+    /** Texto de la misa — almacena nombre o ID como texto */
     @Column("mass_id")
-    private UUID massId;
+    private String massId;
 
     /** UUID del sacramento (vg-ms-sacramentservice) */
     @Column("sacrament_id")
@@ -60,7 +60,7 @@ public class Request {
 
     @Data
     public static class MassInfo {
-        private UUID   id;
+        private String id;
         private String nombre;
         private String intencion;
         private String fecha;
@@ -70,7 +70,7 @@ public class Request {
 
     @Data
     public static class SacramentInfo {
-        private UUID   id;
+        private String id;
         private String name;
         private String description;
     }
