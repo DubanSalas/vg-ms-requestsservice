@@ -84,6 +84,11 @@ public class RequestRest {
         return service.changeStatus(id, body.get("status"));
     }
 
+    @PatchMapping("/{id}/priority")
+    public Mono<Request> changePriority(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        return service.changePriority(id, body.get("priority"));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> delete(@PathVariable Long id) {

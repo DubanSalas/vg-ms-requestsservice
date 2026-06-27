@@ -116,6 +116,17 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override @Transactional
+    public Mono<Request> changePriority(Long id, String priority) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(new RuntimeException("Request not found: " + id)))
+                .flatMap(existing -> {
+                    existing.setPriority(priority);
+                    existing.setUpdatedAt(LocalDateTime.now());
+                    return repository.save(existing).flatMap(this::enrich);
+                });
+    }
+
+    @Override @Transactional
     public Mono<Void> delete(Long id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("Request not found: " + id)))

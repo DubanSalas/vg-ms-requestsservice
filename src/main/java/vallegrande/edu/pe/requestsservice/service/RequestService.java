@@ -16,5 +16,6 @@ public interface RequestService {
     Mono<Request> save(Request request);
     Mono<Request> update(Long id, Request request);
     Mono<Request> changeStatus(Long id, String status);
+    Mono<Request> changePriority(Long id, String priority);
     Mono<Void> delete(Long id);
 }
