@@ -8,6 +8,12 @@ spring:
     password: npg_JPQSp1e0TCj0
   codec:
     max-in-memory-size: 20MB
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://lab.vallegrande.edu.pe:8180/realms/fideinexus
+          jwk-set-uri: http://lab.vallegrande.edu.pe:8180/realms/fideinexus/protocol/openid-connect/certs
 
 logging:
   level:
