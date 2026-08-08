@@ -30,13 +30,14 @@ services:
 
   # ── ms-requests — Microservicio de Solicitudes ───────────────────────────
   ms-requests:
-    image: salasnapandubanalexander/duban-ms-requests-service:1.6
+    image: salasnapandubanalexander/duban-ms-requests-service:1.7
     container_name: fideinexus-ms-requests
     environment:
       SPRING_R2DBC_URL: r2dbc:postgresql://ep-sweet-cherry-ac1jujjy-pooler.sa-east-1.aws.neon.tech/requestsservice?sslmode=require
       SPRING_R2DBC_USERNAME: neondb_owner
       SPRING_R2DBC_PASSWORD: npg_JPQSp1e0TCj0
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/fideinexus
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/fideinexus/protocol/openid-connect/certs
     ports:
       - "8087:8087"
     depends_on:
