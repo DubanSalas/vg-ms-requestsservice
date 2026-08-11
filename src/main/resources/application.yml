@@ -16,8 +16,6 @@ logging:
 services:
   sacrament:
     url: http://lab.vallegrande.edu.pe:8083
-  community:
-    url: http://lab.vallegrande.edu.pe:8090
 
 springdoc:
   api-docs:

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import vallegrande.edu.pe.requestsservice.client.MassClient;
 import vallegrande.edu.pe.requestsservice.client.SacramentClient;
 import vallegrande.edu.pe.requestsservice.model.Request;
 import vallegrande.edu.pe.requestsservice.repository.RequestRepository;
@@ -20,14 +19,8 @@ public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository repository;
     private final SacramentClient   sacramentClient;
-    private final MassClient        massClient;
 
     private Mono<Request> enrich(Request r) {
-        if (r.getMassId() != null) {
-            return massClient.findById(r.getMassId())
-                    .doOnNext(r::setMass)
-                    .thenReturn(r);
-        }
         if (r.getSacramentId() != null) {
             return sacramentClient.findById(r.getSacramentId())
                     .doOnNext(r::setSacrament)

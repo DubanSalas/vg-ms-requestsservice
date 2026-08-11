@@ -21,17 +21,13 @@ public class Request {
     @Column("people_id")
     private Long peopleId;
 
-    /** Texto de la misa — almacena nombre o ID como texto */
+    /** Texto que indica el tipo misa — almacena "MISA" cuando aplica */
     @Column("mass_id")
     private String massId;
 
     /** UUID del sacramento (vg-ms-sacramentservice) */
     @Column("sacrament_id")
     private UUID sacramentId;
-
-    /** Datos de la misa enriquecidos (no se persiste) */
-    @Transient
-    private MassInfo mass;
 
     /** Datos del sacramento enriquecidos (no se persiste) */
     @Transient
@@ -57,16 +53,6 @@ public class Request {
 
     @Column("updated_at")
     private LocalDateTime updatedAt;
-
-    @Data
-    public static class MassInfo {
-        private String id;
-        private String nombre;
-        private String intencion;
-        private String fecha;
-        private String hora;
-        private String estado;
-    }
 
     @Data
     public static class SacramentInfo {

@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import vallegrande.edu.pe.requestsservice.client.MassClient;
 import vallegrande.edu.pe.requestsservice.client.SacramentClient;
 import vallegrande.edu.pe.requestsservice.model.Request;
 import vallegrande.edu.pe.requestsservice.service.RequestService;
@@ -21,9 +20,8 @@ public class RequestRest {
 
     private final RequestService  service;
     private final SacramentClient sacramentClient;
-    private final MassClient      massClient;
 
-    // ── Proxy a microservicios de compañeros ─────────────────────────────────
+    // ── Proxy a sacramentos ──────────────────────────────────────────────────
 
     /** GET /v1/api/requests/types/sacraments?tenantId=1 */
     @GetMapping("/types/sacraments")
@@ -31,14 +29,6 @@ public class RequestRest {
         return tenantId != null
                 ? sacramentClient.findByTenant(tenantId)
                 : sacramentClient.findAll();
-    }
-
-    /** GET /v1/api/requests/types/masses?tenantId=1 */
-    @GetMapping("/types/masses")
-    public Flux<?> getMasses(@RequestParam(required = false) Long tenantId) {
-        return tenantId != null
-                ? massClient.findByTenant(tenantId)
-                : massClient.findActive();
     }
 
     // ── Solicitudes ──────────────────────────────────────────────────────────
