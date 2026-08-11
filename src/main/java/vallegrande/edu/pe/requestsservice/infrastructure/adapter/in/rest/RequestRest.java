@@ -1,24 +1,27 @@
-package vallegrande.edu.pe.requestsservice.rest;
+package vallegrande.edu.pe.requestsservice.infrastructure.adapter.in.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import vallegrande.edu.pe.requestsservice.client.SacramentClient;
-import vallegrande.edu.pe.requestsservice.model.Request;
-import vallegrande.edu.pe.requestsservice.service.RequestService;
+import vallegrande.edu.pe.requestsservice.domain.model.Request;
+import vallegrande.edu.pe.requestsservice.domain.port.in.RequestUseCase;
+import vallegrande.edu.pe.requestsservice.infrastructure.config.SacramentClient;
 
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Adaptador de entrada — convierte peticiones HTTP al caso de uso del dominio.
+ */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/api/requests")
 @RequiredArgsConstructor
 public class RequestRest {
 
-    private final RequestService  service;
+    private final RequestUseCase  useCase;
     private final SacramentClient sacramentClient;
 
     // ── Proxy a sacramentos ──────────────────────────────────────────────────
@@ -41,47 +44,47 @@ public class RequestRest {
             @RequestParam(required = false) String massId) {
 
         if (tenantId != null && sacramentId != null)
-            return service.findByTenantIdAndSacramentId(tenantId, sacramentId);
+            return useCase.findByTenantIdAndSacramentId(tenantId, sacramentId);
         if (tenantId != null && massId != null)
-            return service.findByTenantIdAndMassId(tenantId, massId);
+            return useCase.findByTenantIdAndMassId(tenantId, massId);
         if (tenantId != null && status != null)
-            return service.findByTenantIdAndStatus(tenantId, status);
+            return useCase.findByTenantIdAndStatus(tenantId, status);
         if (tenantId != null)
-            return service.findByTenantId(tenantId);
+            return useCase.findByTenantId(tenantId);
         if (status != null)
-            return service.findByStatus(status);
-        return service.findAll();
+            return useCase.findByStatus(status);
+        return useCase.findAll();
     }
 
     @GetMapping("/{id}")
     public Mono<Request> findById(@PathVariable Long id) {
-        return service.findById(id);
+        return useCase.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Request> save(@RequestBody Request request) {
-        return service.save(request);
+        return useCase.save(request);
     }
 
     @PutMapping("/{id}")
     public Mono<Request> update(@PathVariable Long id, @RequestBody Request request) {
-        return service.update(id, request);
+        return useCase.update(id, request);
     }
 
     @PatchMapping("/{id}/status")
     public Mono<Request> changeStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        return service.changeStatus(id, body.get("status"));
+        return useCase.changeStatus(id, body.get("status"));
     }
 
     @PatchMapping("/{id}/priority")
     public Mono<Request> changePriority(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        return service.changePriority(id, body.get("priority"));
+        return useCase.changePriority(id, body.get("priority"));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> delete(@PathVariable Long id) {
-        return service.delete(id);
+        return useCase.delete(id);
     }
 }

@@ -1,14 +1,18 @@
-package vallegrande.edu.pe.requestsservice.client;
+package vallegrande.edu.pe.requestsservice.infrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import vallegrande.edu.pe.requestsservice.model.Request.SacramentInfo;
+import vallegrande.edu.pe.requestsservice.domain.model.Request.SacramentInfo;
 
 import java.util.UUID;
 
+/**
+ * Cliente HTTP hacia vg-ms-sacramentservice.
+ * Vive en infrastructure porque depende de WebClient (framework externo).
+ */
 @Component
 public class SacramentClient {
 
