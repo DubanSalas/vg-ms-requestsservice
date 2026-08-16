@@ -19,6 +19,13 @@ spring:
   codec:
     max-in-memory-size: 20MB
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://lab.vallegrande.edu.pe/keycloak-security/realms/prs-realm
+          jwk-set-uri: https://lab.vallegrande.edu.pe/keycloak-security/realms/prs-realm/protocol/openid-connect/certs
+
 # ─── Eureka Client ──────────────────────────────────────────────────────────
 eureka:
   client:
