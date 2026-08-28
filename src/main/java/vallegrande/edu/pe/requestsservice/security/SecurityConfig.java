@@ -13,12 +13,91 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+@Configuration
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/api-docs/**",
+                                "/webjars/**",
+                                "/v1/api/requests/types/**"
+                        ).permitAll()
+                        .anyExchange().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(grantedAuthoritiesExtractor()))
+                )
+                .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "http://localhost:4201",
+                "https://lab.vallegrande.edu.pe",
+                "http://lab.vallegrande.edu.pe:9000"
+        ));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With",
+                "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    private Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
+        return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
+    }
+
+    /**
+     * Convierte los roles de Keycloak (realm_access.roles) al formato ROLE_XXX
+     * que entiende Spring Security.
+     * Ejemplo: "SECRETARIO" → "ROLE_SECRETARIO"
+     */
+    class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
+        @Override
+        @SuppressWarnings("unchecked")
+        public Collection<GrantedAuthority> convert(Jwt jwt) {
+            Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get("realm_access");
+            if (realmAccess == null || realmAccess.isEmpty()) {
+                return List.of();
+            }
+            Collection<String> roles = (Collection<String>) realmAccess.get("roles");
+            if (roles == null || roles.isEmpty()) {
+                return List.of();
+            }
+            return roles.stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+                    .collect(Collectors.toList());
+        }
+    }
+}
 
 @Configuration
 @EnableWebFluxSecurity
