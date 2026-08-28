@@ -17,7 +17,9 @@ public class SecurityCorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:4200",
-                "http://lab.vallegrande.edu.pe:9000"
+                "http://localhost:4201",
+                "http://lab.vallegrande.edu.pe:9000",
+                "https://lab.vallegrande.edu.pe"
         ));
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
