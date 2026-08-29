@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/v1/api/requests")
+@RequestMapping("/api/v1/requests")
 @RequiredArgsConstructor
 public class RequestRest {
 

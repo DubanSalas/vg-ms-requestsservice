@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/api-docs/**",
                                 "/webjars/**",
-                                "/v1/api/requests/types/**"
+                                "/api/v1/requests/types/**"
                         ).permitAll()
                         .anyExchange().authenticated()
                 )
