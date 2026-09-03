@@ -2,6 +2,7 @@ package vallegrande.edu.pe.requestsservice.infrastructure.adapter.in.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,16 +18,16 @@ import java.util.UUID;
  */
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/v1/api/requests")
+@RequestMapping("/api/v1/requests")
 @RequiredArgsConstructor
 public class RequestRest {
 
     private final RequestUseCase  useCase;
     private final SacramentClient sacramentClient;
 
-    // ── Proxy a sacramentos ──────────────────────────────────────────────────
+    // ── Proxy a sacramentos (público) ────────────────────────────────────────
 
-    /** GET /v1/api/requests/types/sacraments?tenantId=1 */
+    /** GET /api/v1/requests/types/sacraments?tenantId=1 */
     @GetMapping("/types/sacraments")
     public Flux<?> getSacraments(@RequestParam(required = false) Integer tenantId) {
         return tenantId != null
@@ -36,6 +37,7 @@ public class RequestRest {
 
     // ── Solicitudes ──────────────────────────────────────────────────────────
 
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @GetMapping
     public Flux<Request> findAll(
             @RequestParam(required = false) Long tenantId,
@@ -56,32 +58,38 @@ public class RequestRest {
         return useCase.findAll();
     }
 
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @GetMapping("/{id}")
     public Mono<Request> findById(@PathVariable Long id) {
         return useCase.findById(id);
     }
 
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Request> save(@RequestBody Request request) {
         return useCase.save(request);
     }
 
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @PutMapping("/{id}")
     public Mono<Request> update(@PathVariable Long id, @RequestBody Request request) {
         return useCase.update(id, request);
     }
 
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @PatchMapping("/{id}/status")
     public Mono<Request> changeStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return useCase.changeStatus(id, body.get("status"));
     }
 
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @PatchMapping("/{id}/priority")
     public Mono<Request> changePriority(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return useCase.changePriority(id, body.get("priority"));
     }
 
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> delete(@PathVariable Long id) {

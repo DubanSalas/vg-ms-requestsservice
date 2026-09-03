@@ -1,17 +1,52 @@
-server:
-  port: 8087
-
 spring:
+  application:
+    name: requestsservice
+
   r2dbc:
     url: r2dbc:postgresql://ep-sweet-cherry-ac1jujjy-pooler.sa-east-1.aws.neon.tech/requestsservice?sslmode=require&channel_binding=require
     username: neondb_owner
     password: npg_JPQSp1e0TCj0
+    pool:
+      initial-size: 10
+      max-size: 20
+      max-idle-time: 30m
+
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+
   codec:
     max-in-memory-size: 20MB
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://lab.vallegrande.edu.pe/keycloak-security/realms/prs-realm
+          jwk-set-uri: https://lab.vallegrande.edu.pe/keycloak-security/realms/prs-realm/protocol/openid-connect/certs
+
+# ─── Eureka Client ──────────────────────────────────────────────────────────
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    registerWithEureka: true
+    fetchRegistry: true
+  instance:
+    preferIpAddress: false
+    instanceId: ${spring.application.name}:${server.port}
+
+# ─── Logs de depuración para R2DBC ──────────────────────────────────────────
 logging:
   level:
     org.springframework.r2dbc: DEBUG
+    io.r2dbc.postgresql.QUERY: DEBUG
+    io.r2dbc.postgresql.PARAM: DEBUG
+
+# ─── Puerto del Microservicio ────────────────────────────────────────────────
+server:
+  port: 8087
 
 services:
   sacrament:

@@ -26,7 +26,7 @@ public class SacramentClient {
 
     public Mono<SacramentInfo> findById(UUID id) {
         return webClient.get()
-                .uri("/api/sacraments/{id}", id)
+                .uri("/api/v1/sacraments/{id}", id)
                 .retrieve()
                 .bodyToMono(SacramentInfo.class)
                 .onErrorResume(e -> Mono.empty());
@@ -34,7 +34,7 @@ public class SacramentClient {
 
     public Flux<SacramentInfo> findAll() {
         return webClient.get()
-                .uri("/api/sacraments")
+                .uri("/api/v1/sacraments")
                 .retrieve()
                 .bodyToFlux(SacramentInfo.class)
                 .onErrorResume(e -> Flux.empty());
@@ -42,7 +42,7 @@ public class SacramentClient {
 
     public Flux<SacramentInfo> findByTenant(Integer tenantId) {
         return webClient.get()
-                .uri("/api/sacraments/tenant/{tenantId}", tenantId)
+                .uri("/api/v1/sacraments/tenant/{tenantId}", tenantId)
                 .retrieve()
                 .bodyToFlux(SacramentInfo.class)
                 .onErrorResume(e -> Flux.empty());
