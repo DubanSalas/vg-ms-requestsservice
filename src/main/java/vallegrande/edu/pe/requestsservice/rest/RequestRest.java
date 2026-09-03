@@ -61,32 +61,32 @@ public class RequestRest {
         return service.findById(id);
     }
 
-    @PreAuthorize("hasRole('SECRETARIO')")
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Request> save(@RequestBody Request request) {
         return service.save(request);
     }
 
-    @PreAuthorize("hasRole('SECRETARIO')")
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @PutMapping("/{id}")
     public Mono<Request> update(@PathVariable Long id, @RequestBody Request request) {
         return service.update(id, request);
     }
 
-    @PreAuthorize("hasRole('PARROCO')")
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @PatchMapping("/{id}/status")
     public Mono<Request> changeStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return service.changeStatus(id, body.get("status"));
     }
 
-    @PreAuthorize("hasRole('SECRETARIO')")
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @PatchMapping("/{id}/priority")
     public Mono<Request> changePriority(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return service.changePriority(id, body.get("priority"));
     }
 
-    @PreAuthorize("hasRole('SECRETARIO')")
+    @PreAuthorize("hasAnyRole('SECRETARIO', 'PARROCO')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> delete(@PathVariable Long id) {
