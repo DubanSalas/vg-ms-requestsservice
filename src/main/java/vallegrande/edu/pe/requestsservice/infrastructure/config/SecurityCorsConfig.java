@@ -1,4 +1,4 @@
-package vallegrande.edu.pe.requestsservice.config;
+package vallegrande.edu.pe.requestsservice.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,14 +1,18 @@
-package vallegrande.edu.pe.requestsservice.client;
+package vallegrande.edu.pe.requestsservice.infrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import vallegrande.edu.pe.requestsservice.model.Request.SacramentInfo;
+import vallegrande.edu.pe.requestsservice.domain.model.Request.SacramentInfo;
 
 import java.util.UUID;
 
+/**
+ * Cliente HTTP hacia vg-ms-sacramentservice.
+ * Vive en infrastructure porque depende de WebClient (framework externo).
+ */
 @Component
 public class SacramentClient {
 
@@ -22,7 +26,7 @@ public class SacramentClient {
 
     public Mono<SacramentInfo> findById(UUID id) {
         return webClient.get()
-                .uri("/api/sacraments/{id}", id)
+                .uri("/api/v1/sacraments/{id}", id)
                 .retrieve()
                 .bodyToMono(SacramentInfo.class)
                 .onErrorResume(e -> Mono.empty());
@@ -30,7 +34,7 @@ public class SacramentClient {
 
     public Flux<SacramentInfo> findAll() {
         return webClient.get()
-                .uri("/api/sacraments")
+                .uri("/api/v1/sacraments")
                 .retrieve()
                 .bodyToFlux(SacramentInfo.class)
                 .onErrorResume(e -> Flux.empty());
@@ -38,7 +42,7 @@ public class SacramentClient {
 
     public Flux<SacramentInfo> findByTenant(Integer tenantId) {
         return webClient.get()
-                .uri("/api/sacraments/tenant/{tenantId}", tenantId)
+                .uri("/api/v1/sacraments/tenant/{tenantId}", tenantId)
                 .retrieve()
                 .bodyToFlux(SacramentInfo.class)
                 .onErrorResume(e -> Flux.empty());

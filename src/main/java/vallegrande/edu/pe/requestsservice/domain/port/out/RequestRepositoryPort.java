@@ -1,11 +1,16 @@
-package vallegrande.edu.pe.requestsservice.service;
+package vallegrande.edu.pe.requestsservice.domain.port.out;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import vallegrande.edu.pe.requestsservice.model.Request;
+import vallegrande.edu.pe.requestsservice.domain.model.Request;
+
 import java.util.UUID;
 
-public interface RequestService {
+/**
+ * Puerto de salida (driven port).
+ * Define lo que la aplicación necesita de la capa de persistencia.
+ */
+public interface RequestRepositoryPort {
     Flux<Request> findAll();
     Flux<Request> findByStatus(String status);
     Flux<Request> findByTenantId(Long tenantId);
@@ -14,8 +19,4 @@ public interface RequestService {
     Flux<Request> findByTenantIdAndMassId(Long tenantId, String massId);
     Mono<Request> findById(Long id);
     Mono<Request> save(Request request);
-    Mono<Request> update(Long id, Request request);
-    Mono<Request> changeStatus(Long id, String status);
-    Mono<Request> changePriority(Long id, String priority);
-    Mono<Void> delete(Long id);
 }
