@@ -15,8 +15,10 @@ import java.util.UUID;
 
 /**
  * Adaptador de entrada — convierte peticiones HTTP al caso de uso del dominio.
+ *
+ * CORS: se gestiona de forma centralizada en {@link SecurityCorsConfig},
+ * por lo que no se usa @CrossOrigin aquí para evitar exponer todos los orígenes.
  */
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/requests")
 @RequiredArgsConstructor
